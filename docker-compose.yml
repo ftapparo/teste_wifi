@@ -1,0 +1,17 @@
+# Stack do Portainer: portal cativo da rede WIFI-TESTE
+# Portainer > Stacks > Add stack > Repository
+#   URL: https://github.com/ftapparo/teste_wifi   Compose path: docker-compose.yml
+services:
+  portal:
+    build: .
+    image: portal-wifi:latest
+    container_name: portal-wifi
+    restart: unless-stopped
+    network_mode: host        # vê o IP real de cada aparelho e usa as portas 53/80/443 do servidor
+    cap_add:
+      - NET_ADMIN             # para criar a rota para a rede do Wi-Fi no servidor
+    environment:
+      PORTAL_IP: 192.168.15.112
+      WIFI_REDE: 192.168.170.0/24
+      ROTEADOR_WAN: 192.168.15.50
+      TZ: America/Sao_Paulo
