@@ -74,33 +74,51 @@ function tunel(cliente, host, porta, dadosIniciais) {
 }
 
 // ---------------------------------------------------------------- Página de login
+// Troque a marca aqui quando quiser. MARCA_LOGO pode virar uma tag <img> depois.
+const MARCA = 'MINHA-WIFI';
+const MARCA_LOGO = MARCA; // substitua por `<img src="/logo.png" alt="${MARCA}">` quando tiver o logo
+
 function pagina(titulo, corpo) {
   return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>${titulo}</title>
 <style>
- body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
-      font-family:system-ui,sans-serif;background:#0f172a;color:#e2e8f0}
- .card{background:#1e293b;padding:32px;border-radius:14px;width:100%;max-width:340px;margin:16px;
-       box-shadow:0 10px 30px rgba(0,0,0,.4)}
- h1{margin:0 0 4px;font-size:22px} p{color:#94a3b8;margin:0 0 20px}
- input{width:100%;box-sizing:border-box;padding:12px;margin-bottom:12px;border-radius:8px;
-       border:1px solid #334155;background:#0f172a;color:#e2e8f0;font-size:16px}
- button{width:100%;padding:12px;border:0;border-radius:8px;background:#3b82f6;color:#fff;
-        font-size:16px;font-weight:600;cursor:pointer}
- .erro{color:#f87171;margin-bottom:12px} a{color:#60a5fa}
-</style></head><body><div class="card">${corpo}</div></body></html>`;
+ *{box-sizing:border-box}
+ body{margin:0;min-height:100vh;display:flex;flex-direction:column;
+      font-family:system-ui,'Segoe UI',Arial,sans-serif;background:#f4f4f4;color:#2b2b2b}
+ header{background:#e3000f;padding:16px 20px;display:flex;align-items:center}
+ header .logo{color:#fff;font-size:26px;font-weight:800;letter-spacing:.5px}
+ main{flex:1;display:flex;align-items:center;justify-content:center;padding:20px}
+ .card{background:#fff;padding:28px 24px;border-radius:14px;width:100%;max-width:380px;
+       box-shadow:0 8px 24px rgba(0,0,0,.12);text-align:center}
+ h1{margin:0 0 6px;font-size:21px;color:#e3000f;font-weight:800}
+ p{color:#666;margin:0 0 18px;font-size:15px;line-height:1.4}
+ input{width:100%;padding:13px;margin-bottom:12px;border-radius:9px;
+       border:1px solid #ccc;background:#fafafa;color:#2b2b2b;font-size:16px}
+ input:focus{outline:none;border-color:#e3000f}
+ button{width:100%;padding:14px;border:0;border-radius:40px;background:#e3000f;color:#fff;
+        font-size:16px;font-weight:700;cursor:pointer;margin-top:4px}
+ button:active{background:#b80009}
+ .erro{color:#e3000f;background:#ffe9ea;border-radius:8px;padding:10px;margin-bottom:12px;font-size:14px}
+ .rodape{color:#999;font-size:12px;margin-top:16px}
+ a{color:#e3000f;font-weight:600;text-decoration:none}
+</style></head><body>
+<header><span class="logo">${MARCA_LOGO}</span></header>
+<main><div class="card">${corpo}</div></main>
+</body></html>`;
 }
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 
 function formLogin(destino, erro) {
-  return pagina('WIFI-TESTE', `<h1>WIFI-TESTE</h1><p>Entre para acessar a internet</p>
+  return pagina(MARCA, `<h1>Conecte-se à internet</h1>
+<p>Entre com seus dados para liberar o acesso Wi-Fi.</p>
 ${erro ? `<div class="erro">${erro}</div>` : ''}
 <form method="post" action="/login">
  <input name="usuario" placeholder="Usuário" autocomplete="username" autofocus required>
  <input name="senha" type="password" placeholder="Senha" autocomplete="current-password" required>
  <input type="hidden" name="url" value="${esc(destino || '')}">
- <button>Conectar</button>
-</form>`);
+ <button>QUERO ME CONECTAR</button>
+</form>
+<div class="rodape">Ambiente de teste · ${esc(MARCA)}</div>`);
 }
 
 const portal = http.createServer((req, res) => {
