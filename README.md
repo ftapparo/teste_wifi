@@ -1,7 +1,7 @@
 # teste_wifi
 
 Portal cativo para a rede Wi-Fi aberta **WIFI-TESTE** (Linksys E900).
-Usuário `teste`, senha `123456`.
+Aceita **qualquer** usuário e senha; o que é digitado aparece no log do container.
 
 ## Topologia
 
@@ -18,6 +18,7 @@ Celular (192.168.170.x) ── WIFI-TESTE ── E900 LAN 192.168.170.1
 - **DNS (53):** o portal responde o próprio IP para qualquer nome.
 - **HTTP (80):** sem login, redireciona para a página de login. Com login, repassa ao site real.
 - **HTTPS (443):** sem login, recusa a conexão. Com login, abre um túnel TCP pelo SNI (o certificado não é alterado).
+- Qualquer usuário e senha são aceitos; os valores digitados são gravados no log do container.
 - A liberação é por IP do aparelho e dura 8 horas.
 - Os logins ficam só em memória e somem quando o container reinicia.
 
