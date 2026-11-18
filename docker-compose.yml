@@ -4,7 +4,6 @@
 services:
   portal:
     build: .
-    image: portal-wifi:latest
     container_name: portal-wifi
     restart: unless-stopped
     network_mode: host        # vê o IP real de cada aparelho e usa as portas 53/80/443 do servidor
