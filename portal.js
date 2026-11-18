@@ -78,7 +78,7 @@ function tunel(cliente, host, porta, dadosIniciais) {
 // ---------------------------------------------------------------- Página de login
 // Troque a marca aqui quando quiser.
 const MARCA = 'MINHA-CLARO'; // substitua por "MINHA-CLARO" quando tiver o logo
-const MARCA_LOGO = `<img src="/claro.jpg" alt="${MARCA}">`;
+const MARCA_LOGO = `<img src="http://${PORTAL_IP}/claro.jpg" alt="${MARCA}">`;
 
 function pagina(titulo, corpo) {
   return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
