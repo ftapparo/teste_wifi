@@ -8,6 +8,8 @@ const net = require('net');
 const http = require('http');
 const dgram = require('dgram');
 const dns = require('dns');
+const fs = require('fs');
+const path = require('path');
 const { URLSearchParams } = require('url');
 
 const PORTAL_IP = process.env.PORTAL_IP || '192.168.15.112'; // servidor homelab
@@ -74,9 +76,9 @@ function tunel(cliente, host, porta, dadosIniciais) {
 }
 
 // ---------------------------------------------------------------- Página de login
-// Troque a marca aqui quando quiser. MARCA_LOGO pode virar uma tag <img> depois.
+// Troque a marca aqui quando quiser.
 const MARCA = 'MINHA-CLARO'; // substitua por "MINHA-CLARO" quando tiver o logo
-const MARCA_LOGO = `<img src="/claro.jpg" alt="${MARCA}">`; // substitua por `<img src="/claro.jpg" alt="${MARCA}">` quando tiver o logo
+const MARCA_LOGO = `<img src="/claro.jpg" alt="${MARCA}">`;
 
 function pagina(titulo, corpo) {
   return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
@@ -87,6 +89,7 @@ function pagina(titulo, corpo) {
       font-family:system-ui,'Segoe UI',Arial,sans-serif;background:#f4f4f4;color:#2b2b2b}
  header{background:#e3000f;padding:16px 20px;display:flex;align-items:center}
  header .logo{color:#fff;font-size:26px;font-weight:800;letter-spacing:.5px}
+ header .logo img{display:block;max-width:180px;max-height:48px;object-fit:contain}
  main{flex:1;display:flex;align-items:center;justify-content:center;padding:20px}
  .card{background:#fff;padding:28px 24px;border-radius:14px;width:100%;max-width:380px;
        box-shadow:0 8px 24px rgba(0,0,0,.12);text-align:center}
@@ -118,8 +121,7 @@ ${erro ? `<div class="erro">${erro}</div>` : ''}
  <input name="senha" type="password" placeholder="Senha" autocomplete="current-password" required>
  <input type="hidden" name="url" value="${esc(destino || '')}">
  <button>QUERO ME CONECTAR</button>
-</form>
-<div class="rodape">Ambiente de teste · ${esc(MARCA)}</div>`);
+</form>`);
 }
 
 const portal = http.createServer((req, res) => {
@@ -138,6 +140,19 @@ const portal = http.createServer((req, res) => {
   }
 
   const url = new URL(req.url, `http://${PORTAL_HOST}`);
+
+  if (req.method === 'GET' && url.pathname === '/claro.jpg') {
+    fs.readFile(path.join(__dirname, 'claro.jpg'), (err, imagem) => {
+      if (err) {
+        log(`ERRO ao ler claro.jpg: ${err.message}`);
+        res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+        return res.end('Imagem não encontrada');
+      }
+      res.writeHead(200, { 'Content-Type': 'image/jpeg', 'Cache-Control': 'no-store' });
+      res.end(imagem);
+    });
+    return;
+  }
 
   if (req.method === 'POST' && url.pathname === '/login') {
     let corpo = '';
